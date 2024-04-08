@@ -19,6 +19,7 @@ namespace ISM6225_Spring_2024_Assignment_2
             int[] nums1 = { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 };
             int numberOfUniqueNumbers = RemoveDuplicates(nums1);
             Console.WriteLine(numberOfUniqueNumbers);
+            Console.ReadLine();
 
             //Question 2:
             Console.WriteLine("Question 2:");
@@ -26,6 +27,7 @@ namespace ISM6225_Spring_2024_Assignment_2
             IList<int> resultAfterMovingZero = MoveZeroes(nums2);
             string combinationsString = ConvertIListToArray(resultAfterMovingZero);
             Console.WriteLine(combinationsString);
+            Console.ReadLine();
 
             //Question 3:
             Console.WriteLine("Question 3:");
@@ -33,35 +35,43 @@ namespace ISM6225_Spring_2024_Assignment_2
             IList<IList<int>> triplets = ThreeSum(nums3);
             string tripletResult = ConvertIListToNestedList(triplets);
             Console.WriteLine(tripletResult);
+            Console.ReadLine();
 
             //Question 4:
             Console.WriteLine("Question 4:");
             int[] nums4 = { 1, 1, 0, 1, 1, 1 };
             int maxOnes = FindMaxConsecutiveOnes(nums4);
             Console.WriteLine(maxOnes);
+            Console.ReadLine();
 
             //Question 5:
             Console.WriteLine("Question 5:");
             int binaryInput = 101010;
             int decimalResult = BinaryToDecimal(binaryInput);
             Console.WriteLine(decimalResult);
+            Console.ReadLine();
 
             //Question 6:
             Console.WriteLine("Question 6:");
             int[] nums5 = { 3,6,9,1 };
             int maxGap = MaximumGap(nums5);
+            
             Console.WriteLine(maxGap);
+            Console.ReadLine();
 
             //Question 7:
             Console.WriteLine("Question 7:");
             int[] nums6 = { 2,1,2 };
             int largestPerimeterResult = LargestPerimeter(nums6);
             Console.WriteLine(largestPerimeterResult);
+            Console.ReadLine();
 
             //Question 8:
             Console.WriteLine("Question 8:");
             string result = RemoveOccurrences("daabcbaabcbc", "abc");
             Console.WriteLine(result);
+
+            Console.ReadLine();
         }
 
         /*
@@ -99,14 +109,29 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                if (nums.Length == 0)
+                    return 0;
+
+                int index = 0;
+                // Traversing through the array
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    // If the current element is different from the previous element then, move it to the next position in the array
+                    if (nums[i] != nums[index])
+                    {
+                        index++;
+                        nums[index] = nums[i];
+                    }
+                }
+                // Return the count of unique elements
+                return index + 1;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         /*
         
@@ -130,18 +155,40 @@ namespace ISM6225_Spring_2024_Assignment_2
         -231 <= nums[i] <= 231 - 1
         */
 
+
+
         public static IList<int> MoveZeroes(int[] nums)
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                int count = 0;
+                // Move non-zero elements to the front of the array
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] != 0)
+                    {
+                        nums[count++] = nums[i];
+                    }
+                }
+                // Fill the remaining positions with zeros
+                while (count < nums.Length)
+                {
+                    nums[count++] = 0;
+                }
+
+                // Convert the modified array to IList<int>
+                IList<int> result = new List<int>(nums);
+                return result;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
+
+
 
         /*
 
@@ -185,14 +232,59 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+                Array.Sort(nums);
+                IList<IList<int>> result = new List<IList<int>>();
+
+                int n = nums.Length;
+
+                for (int i = 0; i < n - 2; i++)
+                {
+                    // Skip duplicates
+                    if (i > 0 && nums[i] == nums[i - 1])
+                        continue;
+
+                    // Using two pointers approach for each pair of remaining elements
+                    int left = i + 1;
+                    int right = n - 1;
+
+                    while (left < right)
+                    {
+                        int sum = nums[i] + nums[left] + nums[right];
+                        if (sum == 0)
+                        {
+                            // Add the triplet to the result list
+                            result.Add(new List<int> { nums[i], nums[left], nums[right] });
+
+                            // Skip duplicates
+                            while (left < right && nums[left] == nums[left + 1])
+                                left++;
+                            while (left < right && nums[right] == nums[right - 1])
+                                right--;
+
+                            // Move pointers to find next distinct triplets
+                            left++;
+                            right--;
+                        }
+                        else if (sum < 0)
+                        {
+                            left++;
+                        }
+                        else
+                        {
+                            right--;
+                        }
+                    }
+                }
+
+                return result;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
 
         /*
 
@@ -216,18 +308,37 @@ namespace ISM6225_Spring_2024_Assignment_2
 
         */
 
+
         public static int FindMaxConsecutiveOnes(int[] nums)
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                int maximumcount = 0;
+                int count = 0;
+                // Traversing through the array
+                foreach (int i in nums)
+                {
+                    // Count consecutive 1s
+                    if (i == 1)
+                    {
+                        count++;
+                        maximumcount = Math.Max(maximumcount, count);
+                    }
+                    else
+                    {
+                        // Reset count if the current number is not 1
+                        count = 0;
+                    }
+                }
+
+                return maximumcount;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         /*
 
@@ -252,18 +363,33 @@ namespace ISM6225_Spring_2024_Assignment_2
 
         */
 
-        public static int BinaryToDecimal(int binary)
+
+        public static int BinaryToDecimal(int binval)
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                int decimalNumber = 0;
+                int baseVal = 1;
+
+                while (binval > 0)
+                {
+                    // Extracting the last digit of the binary number
+                    int lastDigit = binval % 10;
+                    binval /= 10;
+
+                    // Converting binary to decimal using powers of 2
+                    decimalNumber += lastDigit * baseVal;
+                    baseVal *= 2;
+                }
+
+                return decimalNumber;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         /*
 
@@ -294,14 +420,24 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                if (nums.Length < 2)
+                    return 0;
+
+                Array.Sort(nums);
+                int maximum_gap = 0;
+                // Traversing through the sorted array and calculate the maximum difference
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    maximum_gap = Math.Max(maximum_gap, nums[i] - nums[i - 1]);
+                }
+                return maximum_gap;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         /*
 
@@ -329,12 +465,21 @@ namespace ISM6225_Spring_2024_Assignment_2
         1 <= nums[i] <= 106
 
         */
-
         public static int LargestPerimeter(int[] nums)
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
+                Array.Sort(nums, (a, b) => b - a);
+
+                for (int i = 0; i < nums.Length - 2; i++)
+                {
+                    // Checking if a triangle can be formed
+                    if (nums[i] < nums[i + 1] + nums[i + 2])
+                    {
+                        return nums[i] + nums[i + 1] + nums[i + 2];
+                    }
+                }
+
                 return 0;
             }
             catch (Exception)
@@ -342,6 +487,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw;
             }
         }
+
 
         /*
 
@@ -384,18 +530,28 @@ namespace ISM6225_Spring_2024_Assignment_2
 
         */
 
+
+
         public static string RemoveOccurrences(string s, string part)
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return "";
+                // Use StringBuilder to efficiently modify the string
+                StringBuilder string_builder = new StringBuilder(s);
+                int index;
+                // Iterate until all occurrences of part are removed
+                while ((index = string_builder.ToString().IndexOf(part)) != -1)
+                {
+                    string_builder.Remove(index, part.Length);
+                }
+                return string_builder.ToString();
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         /* Inbuilt Functions - Don't Change the below functions */
         static string ConvertIListToNestedList(IList<IList<int>> input)
